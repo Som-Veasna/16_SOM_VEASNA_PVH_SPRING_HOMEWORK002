@@ -2,10 +2,14 @@ package com.sna.homework002.controller;
 
 import com.sna.homework002.model.entity.Student;
 import com.sna.homework002.model.request.StudentRequest;
+import com.sna.homework002.model.response.ApiResponse;
 import com.sna.homework002.service.StudentService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.Instant;
 import java.util.List;
 
 @RestController
@@ -18,25 +22,60 @@ public class StudentController {
     }
 
     @GetMapping
-    public List<Student> getAllStudents() {
-        return studentService.getAllStudent();
+    public ResponseEntity<?> getAllStudents() {
+        ApiResponse<?> response=ApiResponse.<List<Student>>builder()
+                .success(true)
+                .message("Get All Students Successfully")
+                .status(HttpStatus.OK.value())
+                .payload(studentService.getAllStudent())
+                .timestamp(Instant.now())
+                .build();
+        return ResponseEntity.ok(response);
     }
     @GetMapping("/{student-id}")
-    public Student getStudentById(@PathVariable("student-id") Integer studentId) {
-        return studentService.getStudentById(studentId);
+    public ResponseEntity<?> getStudentById(@PathVariable("student-id") Integer studentId) {
+        ApiResponse<Student> response=ApiResponse.<Student>builder()
+                .success(true)
+                .message("Get Student Successfully")
+                .status(HttpStatus.OK.value())
+                .payload(studentService.getStudentById(studentId))
+                .timestamp(Instant.now())
+                .build();
+        return ResponseEntity.ok(response);
     }
     @PostMapping
-    public Student saveStudnet(@RequestBody StudentRequest studentRequest) {
-        return studentService.saveStudent(studentRequest);
+    public ResponseEntity<?> saveStudnet(@RequestBody StudentRequest studentRequest) {
+        ApiResponse<Student> response=ApiResponse.<Student>builder()
+                .success(true)
+                .message("Save Student Successfully")
+                .status(HttpStatus.CREATED.value())
+                .payload(studentService.saveStudent(studentRequest))
+                .timestamp(Instant.now())
+                .build();
+        return ResponseEntity.ok(response);
     }
      @DeleteMapping("/{student-id}")
-    public String  deleteStudent(@PathVariable("student-id") Integer studentId) {
+    public ResponseEntity<?>  deleteStudent(@PathVariable("student-id") Integer studentId) {
         studentService.deleteStudentByID(studentId);
-        return "Student deleted successfully";
+        ApiResponse<?> response=ApiResponse.<String>builder()
+                .success(true)
+                .message("Delete Student Successfully")
+                .status(HttpStatus.OK.value())
+                .payload("Student Deleted Successfully")
+                .timestamp(Instant.now())
+                .build();
+        return ResponseEntity.ok(response);
      }
      @PutMapping("/{student-id}")
-    public Student updateStudent(@PathVariable("student-id") Integer studentId, @RequestBody StudentRequest studentRequest) {
-        return studentService.updateStudentById(studentId,studentRequest);
+    public ResponseEntity<?> updateStudent(@PathVariable("student-id") Integer studentId, @RequestBody StudentRequest studentRequest) {
+        ApiResponse<?> response=ApiResponse.<Student>builder()
+                .success(true)
+                .message("Update Student Successfully")
+                .status(HttpStatus.OK.value())
+                .payload( studentService.updateStudentById(studentId,studentRequest))
+                .timestamp(Instant.now())
+                .build();
+        return ResponseEntity.ok(response);
      }
 
 

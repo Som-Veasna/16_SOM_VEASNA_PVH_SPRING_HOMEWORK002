@@ -11,11 +11,9 @@ import java.util.List;
 @Service
 public class InstructorServiceImpl implements InstructorService {
     private final InstructorReository instructorReository;
-
     public InstructorServiceImpl(InstructorReository instructorReository) {
         this.instructorReository = instructorReository;
     }
-
     @Override
     public List<Instructor> getAllInstructors() {
         return instructorReository.getAllInstructor();
@@ -37,7 +35,7 @@ public class InstructorServiceImpl implements InstructorService {
     }
 
     @Override
-    public Instructor deleteInistructorById(Integer id) {
-        return instructorReository.deleteInstructor(id);
+    public void deleteInistructorById(Integer id) {
+         instructorReository.deleteInstructor(id);
     }
 }

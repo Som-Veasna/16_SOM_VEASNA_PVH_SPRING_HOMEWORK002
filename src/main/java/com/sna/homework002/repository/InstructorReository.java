@@ -40,10 +40,10 @@ select * from instructors where instructor_id = #{id};
     @ResultMap("InstructorMapper")
     Instructor updateInstructor(Integer id, @Param("request") InstructorRequest instructorRequest);
 
-    @Select("""
+    @Delete("""
         delete from instructors
         where instructor_id = #{id} returning *;
     """)
-    Instructor deleteInstructor(Integer id);
+    void deleteInstructor(Integer id);
 
 }

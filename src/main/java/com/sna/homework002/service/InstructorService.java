@@ -13,7 +13,7 @@ public interface InstructorService {
     Instructor getInstructorById(Integer id);
     Instructor saveInstructor(InstructorRequest instructor);
     Instructor updateInstructor(Integer id, InstructorRequest instructorRequest);
-    Instructor deleteInistructorById(Integer id);
+    void deleteInistructorById(Integer id);
 
 
 
