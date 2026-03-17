@@ -1,0 +1,6 @@
+How getAllCourseByStudentID work
+1.Course course = new Course();
+2.course.setId(1);
+  course.setName("Introduction to Java");
+  course.setDescription("Core Java concepts");
+  3.course.setInstructor(getInstructorById(1));
