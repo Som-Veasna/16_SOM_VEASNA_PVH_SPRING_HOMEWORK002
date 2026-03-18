@@ -1,7 +1,9 @@
 package com.sna.homework002.service.impl;
 
+import com.sna.homework002.model.entity.Course;
 import com.sna.homework002.model.entity.Student;
 import com.sna.homework002.model.request.StudentRequest;
+import com.sna.homework002.repository.CourseRepository;
 import com.sna.homework002.repository.StudentCourseReposity;
 import com.sna.homework002.repository.StudentRepository;
 import com.sna.homework002.service.StudentService;
@@ -14,10 +16,12 @@ import java.util.List;
 public class StudentServiceImpl implements StudentService {
     private StudentRepository studentRepository;
     private StudentCourseReposity studentCourseReposity;
+    private final CourseRepository courseRepository;
 
-    public StudentServiceImpl(StudentRepository studentRepository, StudentCourseReposity studentCourseReposity) {
+    public StudentServiceImpl(StudentRepository studentRepository, StudentCourseReposity studentCourseReposity, CourseRepository courseRepository) {
         this.studentRepository = studentRepository;
         this.studentCourseReposity = studentCourseReposity;
+        this.courseRepository = courseRepository;
     }
 
     @Override
@@ -32,6 +36,12 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public Student saveStudent(StudentRequest studentRequest) {
+        for (Integer courseId : studentRequest.getCourseId()) {
+            Course course = courseRepository.getCourseById(courseId);
+            if (course == null) {
+                return null;
+            }
+        }
         Student student =studentRepository.saveStudent(studentRequest);
         for(Integer courseId:studentRequest.getCourseId()){
            studentCourseReposity.saveStudentCourse(student.getStudentId(),courseId);

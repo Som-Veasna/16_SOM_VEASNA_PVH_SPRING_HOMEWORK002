@@ -1,19 +1,20 @@
 CREATE TABLE IF NOT EXISTS instructors (
-                                           instructor_id   SERIAL       PRIMARY KEY,                                           instructor_name VARCHAR(100) NOT NULL,
-    email           VARCHAR(150) NOT NULL UNIQUE
+  instructor_id   SERIAL       PRIMARY KEY,
+  instructor_name VARCHAR(100) NOT NULL,
+    email  VARCHAR(150) NOT NULL
     );
 
 CREATE TABLE IF NOT EXISTS courses (
     course_id     SERIAL       PRIMARY KEY,
     course_name   VARCHAR(150) NOT NULL,
     description   TEXT,
-    instructor_id INT          NOT NULL REFERENCES instructors(instructor_id)
+    instructor_id INT  NOT NULL REFERENCES instructors(instructor_id)
     );
 
 CREATE TABLE IF NOT EXISTS students (
-                                        student_id   SERIAL       PRIMARY KEY,
-                                        student_name VARCHAR(100) NOT NULL,
-    email        VARCHAR(150) NOT NULL UNIQUE,
+    student_id   SERIAL       PRIMARY KEY,
+    student_name VARCHAR(100) NOT NULL,
+    email  VARCHAR(150) NOT NULL UNIQUE,
     phone_number VARCHAR(20)
     );
 

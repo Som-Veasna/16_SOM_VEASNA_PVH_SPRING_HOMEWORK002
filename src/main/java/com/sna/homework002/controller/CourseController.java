@@ -83,6 +83,16 @@ public class CourseController {
     @Operation(summary = "Create course")
     @PostMapping
     public ResponseEntity<?> saveCourse(@RequestBody CourseRequest courseRequest) {
+        Course course = coursseService.saveCourse(courseRequest);
+        if (course == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(ApiResponse.<Void>builder()
+                            .success(false)
+                            .status(HttpStatus.NOT_FOUND.value())
+                            .message("Instructor not found with id: " + courseRequest.getInstructorId())
+                            .timestamp(Instant.now())
+                            .build());
+        }
         ApiResponse<Course> response=ApiResponse.<Course>builder()
                 .success(true)
                 .status(HttpStatus.OK.value())
@@ -95,15 +105,26 @@ public class CourseController {
     @Operation(summary = "Update course by id")
     @PutMapping("/{course-id}")
     public ResponseEntity<?> updateCourse(@PathVariable("course-id") Integer courseId, @RequestBody CourseRequest courseRequest) {
-            Course course= coursseService.getCourseById(courseId);
-            if(course==null){
+            Course existingCourse= coursseService.getCourseById(courseId);
+            if(existingCourse==null){
                 return getCourseById(courseId);
+            }
+        Course updated = coursseService.updateCourseByID(courseId, courseRequest);
+            if (updated == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body(ApiResponse.<Void>builder()
+                                .success(false)
+                                .status(HttpStatus.NOT_FOUND.value())
+                                .message("Instructor not found with id: " + courseRequest.getInstructorId())
+                                .payload(null)
+                                .timestamp(Instant.now())
+                                .build());
             }
         ApiResponse<?> response=ApiResponse.<Course>builder()
                 .success(true)
                 .status(HttpStatus.OK.value())
                 .message("Update Course Success")
-                .payload(coursseService.updateCourseByID(courseId,courseRequest))
+                .payload(updated)
                 .timestamp(Instant.now())
                 .build();
         return ResponseEntity.ok(response);

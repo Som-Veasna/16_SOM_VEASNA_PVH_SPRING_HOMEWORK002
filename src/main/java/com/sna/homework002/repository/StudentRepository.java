@@ -32,7 +32,7 @@ select * from students where student_id = #{studentId};
 
     @Select("""
     INSERT INTO students (student_name, email, phone_number)
-    VALUES (#{request.name}, #{request.email}, #{request.phoneNumber})
+    VALUES (#{request.studentName}, #{request.email}, #{request.phoneNumber})
     RETURNING *;
 """)
     @ResultMap("studentMapper")
@@ -44,7 +44,7 @@ DELETE FROM students WHERE student_id = #{studentId};
 """)
     void deleteStudentByID(Integer studentId);
     @Select("""
-  update students set student_name = #{studentRequest.name},email=#{studentRequest.email},phone_number=#{studentRequest.phoneNumber} where student_id = #{studentId} returning *;
+  update students set student_name = #{studentRequest.studentName},email=#{studentRequest.email},phone_number=#{studentRequest.phoneNumber} where student_id = #{studentId} returning *;
 """)
     @ResultMap("studentMapper")
     Student updateStudent(@Param("studentId") Integer studentId,@Param("studentRequest") StudentRequest studentRequest);

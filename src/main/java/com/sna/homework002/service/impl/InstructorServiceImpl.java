@@ -2,10 +2,8 @@ package com.sna.homework002.service.impl;
 
 import com.sna.homework002.model.entity.Instructor;
 import com.sna.homework002.model.request.InstructorRequest;
-import com.sna.homework002.model.response.NotFoundResponse;
 import com.sna.homework002.repository.InstructorReository;
 import com.sna.homework002.service.InstructorService;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;

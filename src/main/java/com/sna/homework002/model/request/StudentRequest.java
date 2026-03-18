@@ -10,7 +10,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class StudentRequest {
-    private String name;
+    private String studentName;
     private String email;
     private String phoneNumber;
     private List<Integer> courseId;

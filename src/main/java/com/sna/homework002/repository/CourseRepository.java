@@ -9,8 +9,8 @@ import java.util.List;
 @Mapper
 public interface CourseRepository {
     @Results(id = "courseMapper", value = {
-            @Result(property = "id", column = "course_id"),
-            @Result(property = "name", column = "course_name"),
+            @Result(property = "courseId", column = "course_id"),
+            @Result(property = "courseName", column = "course_name"),
             @Result(property = "description", column = "description"),
             @Result(
                     property = "instructor",
@@ -19,7 +19,7 @@ public interface CourseRepository {
             )
     })
     @Select("""
-    SELECT  c.course_id, c.course_name,c.description,c.instructor_idFROM student_course sc INNER JOIN courses c ON c.course_id = sc.course_id
+    SELECT  c.course_id, c.course_name,c.description,c.instructor_id FROM student_course sc INNER JOIN courses c ON c.course_id = sc.course_id
     WHERE sc.student_id = #{id};
 """)
 

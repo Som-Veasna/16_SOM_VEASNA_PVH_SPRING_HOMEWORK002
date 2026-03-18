@@ -60,6 +60,16 @@ public class StudentController {
     @Operation(summary = "Create student")
     @PostMapping
     public ResponseEntity<?> saveStudent(@RequestBody StudentRequest studentRequest) {
+        Student student = studentService.saveStudent(studentRequest);
+        if (student == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(ApiResponse.<Void>builder()
+                            .success(false)
+                            .status(HttpStatus.NOT_FOUND.value())
+                            .message("Course not found with id " + studentRequest.getCourseId())
+                            .timestamp(Instant.now())
+                            .build());
+        }
         ApiResponse<Student> response=ApiResponse.<Student>builder()
                 .success(true)
                 .message("Save Student Successfully")

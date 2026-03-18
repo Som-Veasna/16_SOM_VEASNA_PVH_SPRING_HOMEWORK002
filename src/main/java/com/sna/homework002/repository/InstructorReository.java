@@ -10,8 +10,8 @@ import java.util.List;
 @Mapper
 public interface InstructorReository {
     @Results(id = "InstructorMapper",value = {
-            @Result(property = "id",column = "instructor_id"),
-            @Result(property = "name",column = "instructor_name")
+            @Result(property = "instructorId",column = "instructor_id"),
+            @Result(property = "instructorName",column = "instructor_name")
     })
     @Select("""
 select * from instructors 
