@@ -47,8 +47,7 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public void deleteByID(Integer courseId) {
-        courseRepository.deleteEnrollmentsByCourseId(courseId);   // delete join table first
+    public void deleteByCourseID(Integer courseId) {
         courseRepository.deleteByID(courseId);
 
     }

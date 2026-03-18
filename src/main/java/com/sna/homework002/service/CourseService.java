@@ -11,6 +11,6 @@ public interface CourseService {
     List<Course> getAllCourse(Integer size, Integer page);
     Course saveCourse(CourseRequest courseRequest);
     Course updateCourseByID(Integer courseId, CourseRequest courseRequest);
-    void deleteByID(Integer courseId);
+    void deleteByCourseID(Integer courseId);
 
 }

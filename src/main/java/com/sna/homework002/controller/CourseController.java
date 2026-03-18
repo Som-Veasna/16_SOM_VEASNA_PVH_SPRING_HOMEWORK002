@@ -1,7 +1,6 @@
 package com.sna.homework002.controller;
 
 import com.sna.homework002.model.entity.Course;
-import com.sna.homework002.model.entity.Instructor;
 import com.sna.homework002.model.request.CourseRequest;
 import com.sna.homework002.model.response.ApiResponse;
 import com.sna.homework002.service.CourseService;
@@ -116,7 +115,7 @@ public class CourseController {
         if(course==null){
             return getCourseById(courseId);
         }
-        coursseService.deleteByID(courseId);
+        coursseService.deleteByCourseID(courseId);
         ApiResponse<?> response=ApiResponse.<String>builder()
                 .success(true)
                 .status(HttpStatus.OK.value())

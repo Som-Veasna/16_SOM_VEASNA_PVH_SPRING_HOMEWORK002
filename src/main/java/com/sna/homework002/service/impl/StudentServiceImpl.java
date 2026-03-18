@@ -50,7 +50,6 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public Student updateStudentById(Integer studentId,StudentRequest studentRequest) {
-//       Student student= getStudentById(studentId);
        Student updateStudent=studentRepository.updateStudent(studentId,studentRequest);
         studentCourseReposity.deleteStudentCourse(studentId);
            for(Integer courseId:studentRequest.getCourseId()){

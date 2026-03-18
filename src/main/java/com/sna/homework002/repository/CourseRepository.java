@@ -52,6 +52,4 @@ public interface CourseRepository {
     Course updateCourseByID(Integer courseId, @Param("request") CourseRequest courseRequest);
     @Delete("DELETE FROM courses WHERE course_id = #{courseId}")
     void deleteByID(Integer courseId);
-    @Delete("DELETE FROM student_course WHERE course_id = #{courseId}")
-    void deleteEnrollmentsByCourseId(Integer courseId);
 }
