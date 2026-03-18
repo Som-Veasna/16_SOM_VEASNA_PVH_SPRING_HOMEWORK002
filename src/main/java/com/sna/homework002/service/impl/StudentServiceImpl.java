@@ -6,6 +6,7 @@ import com.sna.homework002.repository.StudentCourseReposity;
 import com.sna.homework002.repository.StudentRepository;
 import com.sna.homework002.service.StudentService;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -20,8 +21,8 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public List<Student> getAllStudent() {
-        return studentRepository.getAllStudent();
+    public List<Student> getAllStudent(@RequestParam(defaultValue = "10") Integer size , @RequestParam(defaultValue = "1")Integer page) {
+        return studentRepository.getAllStudent(size,page);
     }
 
     @Override

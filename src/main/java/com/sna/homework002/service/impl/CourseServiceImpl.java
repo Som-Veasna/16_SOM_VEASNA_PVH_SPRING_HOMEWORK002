@@ -2,7 +2,6 @@ package com.sna.homework002.service.impl;
 
 import com.sna.homework002.model.entity.Course;
 import com.sna.homework002.model.request.CourseRequest;
-import com.sna.homework002.model.response.StudentCourseResponse;
 import com.sna.homework002.repository.CourseRepository;
 import com.sna.homework002.service.CourseService;
 import org.springdoc.core.utils.PropertyResolverUtils;
@@ -25,11 +24,7 @@ public class CourseServiceImpl implements CourseService {
         return courseRepository.getAllCourseByStudentId(id);
     }
 
-    @Override
-    public StudentCourseResponse getStudentCourse(Integer id) {
 
-        return null;
-    }
 
     @Override
     public Course getCourseById(Integer id) {
@@ -37,8 +32,8 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public List<Course> getAllCourse() {
-        return courseRepository.getAllCiurse();
+    public List<Course> getAllCourse(Integer size, Integer page) {
+        return courseRepository.getAllCourse(size,page);
     }
 
     @Override

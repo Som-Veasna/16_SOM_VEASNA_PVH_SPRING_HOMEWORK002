@@ -19,8 +19,8 @@ public class InstructorServiceImpl implements InstructorService {
         this.instructorReository = instructorReository;
     }
     @Override
-    public List<Instructor> getAllInstructors() {
-        return instructorReository.getAllInstructor();
+    public List<Instructor> getAllInstructors(Integer size, Integer page) {
+        return instructorReository.getAllInstructor(size,page);
     }
 
 @Override

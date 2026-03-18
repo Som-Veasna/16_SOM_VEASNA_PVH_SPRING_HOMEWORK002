@@ -19,32 +19,11 @@ public interface CourseRepository {
             )
     })
     @Select("""
-    SELECT 
-        c.course_id,
-        c.course_name,
-        c.description,
-        c.instructor_id
-    FROM student_course sc
-    INNER JOIN courses c
-        ON c.course_id = sc.course_id
+    SELECT  c.course_id, c.course_name,c.description,c.instructor_idFROM student_course sc INNER JOIN courses c ON c.course_id = sc.course_id
     WHERE sc.student_id = #{id};
 """)
-    List<Course> getAllCourseByStudentId(Integer id);
 
-    @Select("""
-    SELECT 
-        s.student_id,
-        s.student_name,
-        c.course_id,
-        c.course_name,
-        c.description,
-        c.instructor_id
-    FROM student_course sc
-    JOIN students s ON s.student_id = sc.student_id
-    JOIN courses c ON c.course_id = sc.course_id
-    WHERE s.student_id = #{id};
-""")
-    List<CourseRequest> getAllCourseRequestByStudentId(Integer id);
+    List<Course> getAllCourseByStudentId(Integer id);
 
     @Select("""
      select *  from courses where course_id = #{id};
@@ -53,10 +32,12 @@ public interface CourseRepository {
     Course getCourseById(Integer id);
 
     @Select("""
-     select *  from courses;
+     select *  from courses
+            offset #{size} *(#{page}-1)
+       limit #{size}\s;
 """)
     @ResultMap("courseMapper")
-    List<Course> getAllCiurse();
+    List<Course> getAllCourse(Integer size, Integer page);
 
     @Select("""
      insert into courses (course_name, description, instructor_id) values (#{request.courseName}, #{request.description}, #{request.instructorId}) returning *;

@@ -9,7 +9,7 @@ import java.util.List;
 @Service
 public interface InstructorService {
 
-    List<Instructor> getAllInstructors();
+    List<Instructor> getAllInstructors(Integer size,Integer page);
     Instructor getInstructorById(Integer id);
     Instructor saveInstructor(InstructorRequest instructor);
     Instructor updateInstructor(Integer id, InstructorRequest instructorRequest);

@@ -14,9 +14,12 @@ public interface InstructorReository {
             @Result(property = "name",column = "instructor_name")
     })
     @Select("""
-select * from instructors;
+select * from instructors 
+       offset #{size} *(#{page}-1)
+  limit #{size}\s
+;
 """)
-    List<Instructor> getAllInstructor();
+    List<Instructor> getAllInstructor(Integer size, Integer page);
 
     @Select("""
 select * from instructors where instructor_id = #{id};

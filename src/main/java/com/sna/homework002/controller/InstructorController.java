@@ -3,20 +3,14 @@ package com.sna.homework002.controller;
 import com.sna.homework002.model.entity.Instructor;
 import com.sna.homework002.model.request.InstructorRequest;
 import com.sna.homework002.model.response.ApiResponse;
-import com.sna.homework002.model.response.NotFoundResponse;
 import com.sna.homework002.service.InstructorService;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.models.security.SecurityScheme;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.time.Instant;
 import java.util.List;
-import java.util.Objects;
 
-@Slf4j
 @RestController
 @RequestMapping("/api/v1/instructor")
 public class InstructorController {
@@ -27,12 +21,12 @@ private  final InstructorService instructorService;
     }
     @Operation(summary = "Get all instructor")
     @GetMapping
-    public ResponseEntity<?> getAllInstructors() {
+    public ResponseEntity<?> getAllInstructors(@RequestParam(defaultValue = "10") Integer size , @RequestParam(defaultValue = "1")Integer page) {
         ApiResponse<?> response=ApiResponse.<List<Instructor>>builder()
                 .success(true)
                 .status(HttpStatus.OK.value())
                 .message("Success")
-                .payload(instructorService.getAllInstructors())
+                .payload(instructorService.getAllInstructors(size,page))
                 .timestamp(Instant.now())
                 .build();
         return ResponseEntity.ok(response);
@@ -43,11 +37,10 @@ private  final InstructorService instructorService;
         Instructor instructor = instructorService.getInstructorById(instructorId);
         if (instructor == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(ApiResponse.<Objects>builder()
+                    .body(ApiResponse.<Void>builder()
                             .success(false)
                             .status(HttpStatus.NOT_FOUND.value())
                             .message("Instructor Not Found with id: " + instructorId)
-                            .payload(null)
                             .timestamp(Instant.now())
                             .build());
         }
@@ -99,7 +92,6 @@ private  final InstructorService instructorService;
                 .success(true)
                 .status(HttpStatus.OK.value())
                 .message("delete Instructor success")
-                .payload(null)
                 .timestamp(Instant.now())
                 .build();
         return ResponseEntity.ok(response);

@@ -28,11 +28,21 @@ public class CourseController {
     @Operation(summary = "Get all course by student id")
     @GetMapping("/student/{student-id}")
     public ResponseEntity<?> getAllCourseByStudentId(@PathVariable("student-id") Integer studentId) {
+           var courseByID=coursseService.getAllCourseByStudentId(studentId);
+           if (courseByID == null) {
+               ApiResponse<?> response=ApiResponse.<Objects>builder()
+                       .success(false)
+                       .message("Student does found with id: " + studentId)
+                       .status(HttpStatus.NOT_FOUND.value())
+                       .timestamp(Instant.now())
+                       .build();
+               return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+           }
         ApiResponse<?> response=ApiResponse.<List<Course>>builder()
                 .success(true)
                 .status(HttpStatus.OK.value())
                 .message("Get All Courses By Student Id Success")
-                .payload(coursseService.getAllCourse())
+                .payload(coursseService.getAllCourseByStudentId(studentId))
                 .timestamp(Instant.now())
                 .build();
         return ResponseEntity.ok(response);
@@ -40,6 +50,16 @@ public class CourseController {
     @Operation(summary = "Get course by id")
     @GetMapping("/{course-id}")
     public ResponseEntity<?> getCourseById(@PathVariable("course-id") Integer courseId) {
+          Course course= coursseService.getCourseById(courseId);
+         if (course == null) {
+             ApiResponse<Void> response=ApiResponse.<Void>builder()
+                     .success(false)
+                     .message("Course does not found with id: " + courseId)
+                     .status(HttpStatus.NOT_FOUND.value())
+                     .timestamp(Instant.now())
+                     .build();
+             return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+         }
         ApiResponse<?> response=ApiResponse.<Course>builder()
                 .success(true)
                 .status(HttpStatus.OK.value())
@@ -51,12 +71,12 @@ public class CourseController {
     }
     @Operation(summary = "Get all course")
     @GetMapping
-    public ResponseEntity<?> getAllCourse() {
+    public ResponseEntity<?> getAllCourse(@RequestParam(defaultValue = "10") Integer size , @RequestParam(defaultValue = "1")Integer page) {
         ApiResponse<List<Course>> response=ApiResponse.<List<Course>>builder()
                 .success(true)
                 .status(HttpStatus.OK.value())
                 .message("Get All Courses Success")
-                .payload(coursseService.getAllCourse())
+                .payload(coursseService.getAllCourse(size,page))
                 .timestamp(Instant.now())
                 .build();
         return ResponseEntity.ok(response);
@@ -76,6 +96,10 @@ public class CourseController {
     @Operation(summary = "Update course by id")
     @PutMapping("/{course-id}")
     public ResponseEntity<?> updateCourse(@PathVariable("course-id") Integer courseId, @RequestBody CourseRequest courseRequest) {
+            Course course= coursseService.getCourseById(courseId);
+            if(course==null){
+                return getCourseById(courseId);
+            }
         ApiResponse<?> response=ApiResponse.<Course>builder()
                 .success(true)
                 .status(HttpStatus.OK.value())
@@ -88,6 +112,10 @@ public class CourseController {
     @Operation(summary = "Delete course by id")
     @DeleteMapping("/{course-id}")
     public ResponseEntity<?> deleteCourse(@PathVariable("course-id") Integer courseId) {
+        Course course= coursseService.getCourseById(courseId);
+        if(course==null){
+            return getCourseById(courseId);
+        }
         coursseService.deleteByID(courseId);
         ApiResponse<?> response=ApiResponse.<String>builder()
                 .success(true)

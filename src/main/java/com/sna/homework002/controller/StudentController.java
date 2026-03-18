@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("/api/v1/students")
@@ -23,12 +24,12 @@ public class StudentController {
     }
     @Operation(summary = "Get all student")
     @GetMapping
-    public ResponseEntity<?> getAllStudents() {
+    public ResponseEntity<?> getAllStudents(@RequestParam(defaultValue = "10") Integer size , @RequestParam(defaultValue = "1")Integer page) {
         ApiResponse<?> response=ApiResponse.<List<Student>>builder()
                 .success(true)
                 .message("Get All Students Successfully")
                 .status(HttpStatus.OK.value())
-                .payload(studentService.getAllStudent())
+                .payload(studentService.getAllStudent(size , page))
                 .timestamp(Instant.now())
                 .build();
         return ResponseEntity.ok(response);
@@ -36,6 +37,17 @@ public class StudentController {
     @Operation(summary = "Get student by id")
     @GetMapping("/{student-id}")
     public ResponseEntity<?> getStudentById(@PathVariable("student-id") Integer studentId) {
+       Student student= studentService.getStudentById(studentId);
+       if(student==null){
+           ApiResponse<Void>response=ApiResponse.<Void>builder()
+                   .success(false)
+                   .status(HttpStatus.NOT_FOUND.value())
+                   .message("Student not found with id " + studentId)
+                   .timestamp(Instant.now())
+                   .build();
+           return ResponseEntity.ok(response);
+       }
+
         ApiResponse<Student> response=ApiResponse.<Student>builder()
                 .success(true)
                 .message("Get Student Successfully")
@@ -47,7 +59,7 @@ public class StudentController {
     }
     @Operation(summary = "Create student")
     @PostMapping
-    public ResponseEntity<?> saveStudnet(@RequestBody StudentRequest studentRequest) {
+    public ResponseEntity<?> saveStudent(@RequestBody StudentRequest studentRequest) {
         ApiResponse<Student> response=ApiResponse.<Student>builder()
                 .success(true)
                 .message("Save Student Successfully")
@@ -60,6 +72,10 @@ public class StudentController {
     @Operation(summary = "Delete student by id")
      @DeleteMapping("/{student-id}")
     public ResponseEntity<?>  deleteStudent(@PathVariable("student-id") Integer studentId) {
+        Student student=  studentService.getStudentById(studentId);
+        if(student==null){
+            return getStudentById(studentId);
+        }
         studentService.deleteStudentByID(studentId);
         ApiResponse<?> response=ApiResponse.<String>builder()
                 .success(true)
@@ -73,6 +89,10 @@ public class StudentController {
     @Operation(summary = "Update student by id")
      @PutMapping("/{student-id}")
     public ResponseEntity<?> updateStudent(@PathVariable("student-id") Integer studentId, @RequestBody StudentRequest studentRequest) {
+          Student student=  studentService.getStudentById(studentId);
+          if(student==null){
+              return getStudentById(studentId);
+          }
         ApiResponse<?> response=ApiResponse.<Student>builder()
                 .success(true)
                 .message("Update Student Successfully")
@@ -82,5 +102,4 @@ public class StudentController {
                 .build();
         return ResponseEntity.ok(response);
      }
-
 }

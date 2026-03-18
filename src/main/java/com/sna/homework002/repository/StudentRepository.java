@@ -18,9 +18,12 @@ public interface StudentRepository {
             )
     })
     @Select("""
-     select * from students;
+     select * from students
+            offset #{size} *(#{page}-1)
+       limit #{size}\s
+     ;
 """)
-    List<Student> getAllStudent();
+    List<Student> getAllStudent(Integer size,Integer page);
     @Select("""
 select * from students where student_id = #{studentId}; 
 """)
