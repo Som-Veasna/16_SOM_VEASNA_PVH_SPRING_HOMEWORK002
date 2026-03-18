@@ -5,6 +5,7 @@ import com.sna.homework002.model.entity.Instructor;
 import com.sna.homework002.model.request.CourseRequest;
 import com.sna.homework002.model.response.ApiResponse;
 import com.sna.homework002.service.CourseService;
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,9 +25,9 @@ public class CourseController {
         this.coursseService = coursseService;
         this.resourceUrlProvider = resourceUrlProvider;
     }
-
+    @Operation(summary = "Get all course by student id")
     @GetMapping("/student/{student-id}")
-    public ResponseEntity<?> tAllCourseByStudentId(@PathVariable("student-id") Integer studentId) {
+    public ResponseEntity<?> getAllCourseByStudentId(@PathVariable("student-id") Integer studentId) {
         ApiResponse<?> response=ApiResponse.<List<Course>>builder()
                 .success(true)
                 .status(HttpStatus.OK.value())
@@ -36,6 +37,7 @@ public class CourseController {
                 .build();
         return ResponseEntity.ok(response);
     }
+    @Operation(summary = "Get course by id")
     @GetMapping("/{course-id}")
     public ResponseEntity<?> getCourseById(@PathVariable("course-id") Integer courseId) {
         ApiResponse<?> response=ApiResponse.<Course>builder()
@@ -47,6 +49,7 @@ public class CourseController {
                 .build();
         return ResponseEntity.ok(response) ;
     }
+    @Operation(summary = "Get all course")
     @GetMapping
     public ResponseEntity<?> getAllCourse() {
         ApiResponse<List<Course>> response=ApiResponse.<List<Course>>builder()
@@ -58,6 +61,7 @@ public class CourseController {
                 .build();
         return ResponseEntity.ok(response);
     }
+    @Operation(summary = "Create course")
     @PostMapping
     public ResponseEntity<?> saveCourse(@RequestBody CourseRequest courseRequest) {
         ApiResponse<Course> response=ApiResponse.<Course>builder()
@@ -69,6 +73,7 @@ public class CourseController {
                 .build();
         return ResponseEntity.ok(response);
     }
+    @Operation(summary = "Update course by id")
     @PutMapping("/{course-id}")
     public ResponseEntity<?> updateCourse(@PathVariable("course-id") Integer courseId, @RequestBody CourseRequest courseRequest) {
         ApiResponse<?> response=ApiResponse.<Course>builder()
@@ -80,6 +85,7 @@ public class CourseController {
                 .build();
         return ResponseEntity.ok(response);
     }
+    @Operation(summary = "Delete course by id")
     @DeleteMapping("/{course-id}")
     public ResponseEntity<?> deleteCourse(@PathVariable("course-id") Integer courseId) {
         coursseService.deleteByID(courseId);

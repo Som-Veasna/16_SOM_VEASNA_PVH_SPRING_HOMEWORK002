@@ -3,7 +3,9 @@ package com.sna.homework002.controller;
 import com.sna.homework002.model.entity.Instructor;
 import com.sna.homework002.model.request.InstructorRequest;
 import com.sna.homework002.model.response.ApiResponse;
+import com.sna.homework002.model.response.NotFoundResponse;
 import com.sna.homework002.service.InstructorService;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.models.security.SecurityScheme;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.Objects;
 
 @Slf4j
 @RestController
@@ -22,6 +25,7 @@ private  final InstructorService instructorService;
     public InstructorController(InstructorService instructorService) {
         this.instructorService = instructorService;
     }
+    @Operation(summary = "Get all instructor")
     @GetMapping
     public ResponseEntity<?> getAllInstructors() {
         ApiResponse<?> response=ApiResponse.<List<Instructor>>builder()
@@ -33,17 +37,29 @@ private  final InstructorService instructorService;
                 .build();
         return ResponseEntity.ok(response);
     }
+    @Operation(summary = "Get instructor by id")
     @GetMapping("/{instructor-id}")
     public ResponseEntity<?> getInstructorById(@PathVariable("instructor-id") Integer instructorId) {
-        ApiResponse<?> response=ApiResponse.<Instructor>builder()
+        Instructor instructor = instructorService.getInstructorById(instructorId);
+        if (instructor == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(ApiResponse.<Objects>builder()
+                            .success(false)
+                            .status(HttpStatus.NOT_FOUND.value())
+                            .message("Instructor Not Found with id: " + instructorId)
+                            .payload(null)
+                            .timestamp(Instant.now())
+                            .build());
+        }
+        return ResponseEntity.ok(ApiResponse.<Instructor>builder()
                 .success(true)
                 .status(HttpStatus.OK.value())
-                .message("get Instructor success")
-                .payload(instructorService.getInstructorById(instructorId))
+                .message("Get Instructor Successfully")
+                .payload(instructor)
                 .timestamp(Instant.now())
-                .build();
-        return ResponseEntity.ok(response);
+                .build());
     }
+    @Operation(summary = "Create instructor")
     @PostMapping
     public ResponseEntity<?> saveInstructor(@RequestBody InstructorRequest instructorRequest){
         ApiResponse<Instructor> response=ApiResponse.<Instructor>builder()
@@ -55,8 +71,13 @@ private  final InstructorService instructorService;
                 .build();
         return ResponseEntity.ok(response);
     }
+    @Operation(summary = "Update instructor by id")
     @PutMapping("/{instructor-id}")
     public ResponseEntity<?> updateInstructorByID(@PathVariable("instructor-id") Integer id, @RequestBody InstructorRequest instructorRequest) {
+        Instructor instructor=instructorService.getInstructorById(id);
+        if(instructor==null){
+            return getInstructorById(id);
+        }
         ApiResponse<Instructor> response=ApiResponse.<Instructor>builder()
                 .success(true)
                 .status(HttpStatus.OK.value())
@@ -66,19 +87,22 @@ private  final InstructorService instructorService;
                 .build();
         return ResponseEntity.ok(response);
     }
+    @Operation(summary = "Delete instructor by id")
     @DeleteMapping("/{instructor-id}")
     public ResponseEntity<?> deleteInstructorByID(@PathVariable("instructor-id") Integer id) {
+        Instructor instructor=instructorService.getInstructorById(id);
+        if(instructor==null){
+            return getInstructorById(id);
+        }
         instructorService.deleteInistructorById(id);
         ApiResponse<?> response=ApiResponse.<String>builder()
                 .success(true)
                 .status(HttpStatus.OK.value())
                 .message("delete Instructor success")
-                .payload("delete Instructor success")
+                .payload(null)
                 .timestamp(Instant.now())
                 .build();
         return ResponseEntity.ok(response);
     }
-
-
-
 }
+

@@ -4,6 +4,7 @@ import com.sna.homework002.model.entity.Student;
 import com.sna.homework002.model.request.StudentRequest;
 import com.sna.homework002.model.response.ApiResponse;
 import com.sna.homework002.service.StudentService;
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -20,7 +21,7 @@ public class StudentController {
     public StudentController(StudentService studentService) {
         this.studentService = studentService;
     }
-
+    @Operation(summary = "Get all student")
     @GetMapping
     public ResponseEntity<?> getAllStudents() {
         ApiResponse<?> response=ApiResponse.<List<Student>>builder()
@@ -32,6 +33,7 @@ public class StudentController {
                 .build();
         return ResponseEntity.ok(response);
     }
+    @Operation(summary = "Get student by id")
     @GetMapping("/{student-id}")
     public ResponseEntity<?> getStudentById(@PathVariable("student-id") Integer studentId) {
         ApiResponse<Student> response=ApiResponse.<Student>builder()
@@ -43,6 +45,7 @@ public class StudentController {
                 .build();
         return ResponseEntity.ok(response);
     }
+    @Operation(summary = "Create student")
     @PostMapping
     public ResponseEntity<?> saveStudnet(@RequestBody StudentRequest studentRequest) {
         ApiResponse<Student> response=ApiResponse.<Student>builder()
@@ -54,6 +57,7 @@ public class StudentController {
                 .build();
         return ResponseEntity.ok(response);
     }
+    @Operation(summary = "Delete student by id")
      @DeleteMapping("/{student-id}")
     public ResponseEntity<?>  deleteStudent(@PathVariable("student-id") Integer studentId) {
         studentService.deleteStudentByID(studentId);
@@ -66,6 +70,7 @@ public class StudentController {
                 .build();
         return ResponseEntity.ok(response);
      }
+    @Operation(summary = "Update student by id")
      @PutMapping("/{student-id}")
     public ResponseEntity<?> updateStudent(@PathVariable("student-id") Integer studentId, @RequestBody StudentRequest studentRequest) {
         ApiResponse<?> response=ApiResponse.<Student>builder()
@@ -77,7 +82,5 @@ public class StudentController {
                 .build();
         return ResponseEntity.ok(response);
      }
-
-
 
 }
