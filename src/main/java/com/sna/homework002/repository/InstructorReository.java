@@ -14,7 +14,7 @@ public interface InstructorReository {
             @Result(property = "instructorName",column = "instructor_name")
     })
     @Select("""
-select * from instructors 
+select * from instructors  order by instructor_id asc
        offset #{size} *(#{page}-1)
   limit #{size}\s
 ;
@@ -29,14 +29,14 @@ select * from instructors where instructor_id = #{id};
 
     @Select("""
         insert into instructors(instructor_name,email)
-        values(#{request.name},#{request.email}) returning *;
+        values(#{request.instructorName},#{request.email}) returning *;
     """)
     @ResultMap("InstructorMapper")
     Instructor saveInstructor(@Param("request") InstructorRequest instructor);
 
     @Select("""
         update instructors
-        set instructor_name = #{request.name},
+        set instructor_name = #{request.instructorName},
             email = #{request.email}
         where instructor_id = #{id} returning *;
     """)

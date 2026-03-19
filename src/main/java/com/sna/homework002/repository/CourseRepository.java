@@ -8,6 +8,7 @@ import java.util.List;
 
 @Mapper
 public interface CourseRepository {
+
     @Results(id = "courseMapper", value = {
             @Result(property = "courseId", column = "course_id"),
             @Result(property = "courseName", column = "course_name"),
@@ -19,26 +20,22 @@ public interface CourseRepository {
             )
     })
     @Select("""
+     select *  from courses where course_id = #{id};
+""")
+    Course getCourseById(Integer id);
+    @Select("""
     SELECT  c.course_id, c.course_name,c.description,c.instructor_id FROM student_course sc INNER JOIN courses c ON c.course_id = sc.course_id
     WHERE sc.student_id = #{id};
-""")
-
+""")@ResultMap("courseMapper")
     List<Course> getAllCourseByStudentId(Integer id);
 
     @Select("""
-     select *  from courses where course_id = #{id};
-""")
-    @ResultMap("courseMapper")
-    Course getCourseById(Integer id);
-
-    @Select("""
-     select *  from courses
+     select *  from courses order by course_id asc
             offset #{size} *(#{page}-1)
        limit #{size}\s;
 """)
     @ResultMap("courseMapper")
     List<Course> getAllCourse(Integer size, Integer page);
-
     @Select("""
      insert into courses (course_name, description, instructor_id) values (#{request.courseName}, #{request.description}, #{request.instructorId}) returning *;
 """)

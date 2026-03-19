@@ -99,15 +99,25 @@ public class StudentController {
     @Operation(summary = "Update student by id")
      @PutMapping("/{student-id}")
     public ResponseEntity<?> updateStudent(@PathVariable("student-id") Integer studentId, @RequestBody StudentRequest studentRequest) {
-          Student student=  studentService.getStudentById(studentId);
-          if(student==null){
-              return getStudentById(studentId);
-          }
+          Student foundStudent=  studentService.getStudentById(studentId);
+        if(foundStudent==null){
+            return getStudentById(studentId);
+        }
+        Student student=studentService.updateStudentById(studentId,studentRequest);
+        if (student==null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(ApiResponse.<Void>builder()
+                            .success(false)
+                            .status(HttpStatus.NOT_FOUND.value())
+                            .message("Course not found with id " + studentRequest.getCourseId())
+                            .timestamp(Instant.now())
+                            .build());
+        }
         ApiResponse<?> response=ApiResponse.<Student>builder()
                 .success(true)
                 .message("Update Student Successfully")
                 .status(HttpStatus.OK.value())
-                .payload( studentService.updateStudentById(studentId,studentRequest))
+                .payload( student)
                 .timestamp(Instant.now())
                 .build();
         return ResponseEntity.ok(response);

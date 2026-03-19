@@ -29,6 +29,7 @@ public class StudentServiceImpl implements StudentService {
         return studentRepository.getAllStudent(size,page);
     }
 
+
     @Override
     public Student getStudentById(Integer studentId) {
         return studentRepository.getStudentById(studentId);
@@ -36,11 +37,8 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public Student saveStudent(StudentRequest studentRequest) {
-        for (Integer courseId : studentRequest.getCourseId()) {
-            Course course = courseRepository.getCourseById(courseId);
-            if (course == null) {
-                return null;
-            }
+        if (!checkCourse(studentRequest)) {
+            return null;
         }
         Student student =studentRepository.saveStudent(studentRequest);
         for(Integer courseId:studentRequest.getCourseId()){
@@ -60,6 +58,9 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public Student updateStudentById(Integer studentId,StudentRequest studentRequest) {
+        if (!checkCourse(studentRequest)) {
+            return null;
+        }
        Student updateStudent=studentRepository.updateStudent(studentId,studentRequest);
         studentCourseReposity.deleteStudentCourse(studentId);
            for(Integer courseId:studentRequest.getCourseId()){
@@ -67,5 +68,14 @@ public class StudentServiceImpl implements StudentService {
            }
 
         return studentRepository.getStudentById(updateStudent.getStudentId());
+    }
+    public boolean checkCourse(StudentRequest studentRequest) {
+        for (Integer courseId : studentRequest.getCourseId()) {
+            Course course = courseRepository.getCourseById(courseId);
+            if (course == null) {
+                return false;
+            }
+        }
+        return true;
     }
 }

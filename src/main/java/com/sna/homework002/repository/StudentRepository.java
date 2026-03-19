@@ -19,8 +19,9 @@ public interface StudentRepository {
     })
     @Select("""
      select * from students
+          ORDER BY student_id ASC 
             offset #{size} *(#{page}-1)
-       limit #{size}\s
+       limit #{size}\s 
      ;
 """)
     List<Student> getAllStudent(Integer size,Integer page);
